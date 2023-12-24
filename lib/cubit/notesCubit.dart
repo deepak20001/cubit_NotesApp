@@ -33,6 +33,11 @@ class NotesCubit extends Cubit<NotesState> {
     }
   }
 
+  void deleteNote(int index) {
+    notes.removeAt(index);
+    emit(NotesState(notes: notes));
+  }
+
   String? titleValidator(String? value) {
     if (value!.isEmpty) {
       return "Please Enter title!";

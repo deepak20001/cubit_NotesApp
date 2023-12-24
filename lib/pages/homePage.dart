@@ -39,9 +39,6 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              const Divider(
-                thickness: 3.0,
-              ),
               Padding(
                 padding: const EdgeInsets.all(10.0).copyWith(bottom: 80),
                 child: BlocBuilder<NotesCubit, NotesState>(
@@ -67,11 +64,20 @@ class HomePage extends StatelessWidget {
                               color: Colors.grey.shade600,
                             ),
                           ),
+                          trailing: IconButton(
+                            onPressed: () {
+                              notesCubit.deleteNote(index);
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Colors.redAccent,
+                            ),
+                          ),
                         );
                       },
                       separatorBuilder: (context, index) {
                         return Divider(
-                          color: Colors.grey.shade300,
+                          color: Colors.grey.shade600,
                           thickness: 1.5,
                         );
                       },
