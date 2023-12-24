@@ -1,4 +1,4 @@
-import 'package:cubit_notes_app/cubit/addNotesCubit.dart';
+import 'package:cubit_notes_app/cubit/notesCubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'pages/homePage.dart';
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AddNotesCubit(),
+      create: (context) => NotesCubit(),
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,

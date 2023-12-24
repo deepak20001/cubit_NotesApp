@@ -1,73 +1,85 @@
+import 'package:cubit_notes_app/pages/addNotesPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../cubit/addNotesCubit.dart';
+import '../cubit/notesCubit.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final addNotesCubit = BlocProvider.of<AddNotesCubit>(context);
+    final notesCubit = BlocProvider.of<NotesCubit>(context);
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const AddNotesPage(),
+            ),
+          );
+        },
+        label: const Text("Add Notes"),
+        icon: const Icon(Icons.add),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              key: addNotesCubit.formKey,
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    "ENTER YOUR \nNOTES",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).primaryColor,
-                    ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "MY NOTES",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).primaryColor,
                   ),
-                  const SizedBox(height: 40),
-                  TextFormField(
-                    controller: addNotesCubit.titleController,
-                    validator: addNotesCubit.titleValidator,
-                    decoration: const InputDecoration(
-                      hintText: "Enter title",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextFormField(
-                    controller: addNotesCubit.detailController,
-                    validator: addNotesCubit.detailValidator,
-                    minLines: 3,
-                    maxLines: null,
-                    decoration: const InputDecoration(
-                      hintText: "Enter detail",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  MaterialButton(
-                    color: Colors.amber,
-                    minWidth: double.infinity,
-                    onPressed: () {
-                      addNotesCubit.submit();
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.all(14.0),
-                      child: Text(
-                        "SAVE",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
+                ),
               ),
-            ),
+              const Divider(
+                thickness: 3.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10.0).copyWith(bottom: 80),
+                child: BlocBuilder<NotesCubit, NotesState>(
+                  builder: (context, state) {
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      reverse: true,
+                      itemCount: notesCubit.notes.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(
+                            state.notes![index].title!.toUpperCase(),
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                          subtitle: Text(
+                            state.notes![index].detail!,
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return Divider(
+                          color: Colors.grey.shade300,
+                          thickness: 1.5,
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),

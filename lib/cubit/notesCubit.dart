@@ -1,16 +1,35 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../model/notes_model.dart';
 
-class AddNotesCubit extends Cubit<String> {
-  AddNotesCubit() : super("start");
+class NotesState {
+  final List<Notes>? notes;
+
+  NotesState({
+    this.notes,
+  });
+}
+
+class NotesCubit extends Cubit<NotesState> {
+  NotesCubit() : super(NotesState());
 
   final titleController = TextEditingController();
   final detailController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  List<Notes> notes = [];
 
   void submit() {
     if (formKey.currentState!.validate()) {
-      debugPrint(titleController.text);
+      notes.add(
+        Notes(
+          title: titleController.text,
+          detail: detailController.text,
+        ),
+      );
+      emit(NotesState(notes: notes));
+      titleController.clear();
+      detailController.clear();
     }
   }
 
