@@ -1,13 +1,18 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../cubit/notesCubit.dart';
 
-class AddNotesPage extends StatelessWidget {
-  const AddNotesPage({super.key});
+class EditNotesPage extends StatelessWidget {
+  const EditNotesPage({
+    Key? key,
+    required this.index,
+  }) : super(key: key);
+  final int index;
 
   @override
   Widget build(BuildContext context) {
-    final addNotesCubit = BlocProvider.of<NotesCubit>(context);
+    final editNotesCubit = BlocProvider.of<NotesCubit>(context);
 
     return Scaffold(
       appBar: AppBar(),
@@ -16,11 +21,11 @@ class AddNotesPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Form(
-              key: addNotesCubit.formKey,
+              key: editNotesCubit.formKey,
               child: Column(
                 children: <Widget>[
                   Text(
-                    "ENTER YOUR \nNOTES",
+                    "EDIT YOUR \nNOTES",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 40,
@@ -30,22 +35,22 @@ class AddNotesPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 40),
                   TextFormField(
-                    controller: addNotesCubit.titleController,
-                    validator: addNotesCubit.titleValidator,
-                    decoration: const InputDecoration(
-                      hintText: "Enter title",
-                      border: OutlineInputBorder(),
+                    controller: editNotesCubit.titleController,
+                    validator: editNotesCubit.titleValidator,
+                    decoration: InputDecoration(
+                      hintText: editNotesCubit.notes[index].title,
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
-                    controller: addNotesCubit.detailController,
-                    validator: addNotesCubit.detailValidator,
+                    controller: editNotesCubit.detailController,
+                    validator: editNotesCubit.detailValidator,
                     minLines: 3,
                     maxLines: null,
-                    decoration: const InputDecoration(
-                      hintText: "Enter detail",
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      hintText: editNotesCubit.notes[index].detail,
+                      border: const OutlineInputBorder(),
                     ),
                   ),
                   const SizedBox(height: 40),
@@ -53,13 +58,13 @@ class AddNotesPage extends StatelessWidget {
                     color: Colors.amber,
                     minWidth: double.infinity,
                     onPressed: () {
-                      addNotesCubit.submit();
+                      editNotesCubit.updateNote(index);
                       Navigator.pop(context);
                     },
                     child: const Padding(
                       padding: EdgeInsets.all(14.0),
                       child: Text(
-                        "SAVE",
+                        "UPDATE",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 20,

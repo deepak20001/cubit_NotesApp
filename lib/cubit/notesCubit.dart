@@ -38,6 +38,21 @@ class NotesCubit extends Cubit<NotesState> {
     emit(NotesState(notes: notes));
   }
 
+  void updateNote(int index) {
+    if (titleController.text.isEmpty) {
+      titleController.text = notes[index].title!;
+    }
+    if (detailController.text.isEmpty) {
+      detailController.text = notes[index].detail!;
+    }
+    notes[index].title = titleController.text;
+    notes[index].detail = detailController.text;
+    emit(NotesState(notes: notes));
+
+    titleController.clear();
+    detailController.clear();
+  }
+
   String? titleValidator(String? value) {
     if (value!.isEmpty) {
       return "Please Enter title!";
